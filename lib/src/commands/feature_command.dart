@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:args/command_runner.dart';
 import 'package:injil_cli/src/utils/project_location_util.dart';
 import 'package:mason_logger/mason_logger.dart';
@@ -26,6 +28,13 @@ class FeatureCommand extends Command<int> {
   @override
   String get name => 'feature';
 
+  final featuresPath = 'lib/src/features';
+  final featureFolders = [
+    'config',
+    'data',
+    'domain',
+    'presentation',
+  ];
   final Logger _logger;
   final ProjectLocationUtil _locationUtils;
 
@@ -38,12 +47,34 @@ class FeatureCommand extends Command<int> {
     }
     final isRoot = await _locationUtils.isProjectRoot();
     if (isRoot) {
-      var output = 'New feature created';
-      output = lightYellow.wrap(output)!;
-      _logger.info(output);
+      return _createFeature(featureName.toString());
     } else {
       _logger.err('Not a project root');
     }
+    return ExitCode.success.code;
+  }
+
+  Future<int> _createFeature(String featureName) async {
+    final isExists = await _locationUtils.isPathExists(featuresPath);
+    if (!isExists) {
+      await _locationUtils.createPath(featuresPath);
+    }
+
+    final featurePath = '$featuresPath/$featureName';
+    final isFeatureExists = await _locationUtils.isPathExists(featurePath);
+    if (isFeatureExists) {
+      _logger.err('Feature already exists');
+      return ExitCode.success.code;
+    }
+
+    for (final folder in featureFolders) {
+      await _locationUtils.createPath('$featurePath/$folder');
+    }
+
+    var output = 'Feature $featureName created successfully';
+    output = lightYellow.wrap(output)!;
+    _logger.info(output);
+
     return ExitCode.success.code;
   }
 }

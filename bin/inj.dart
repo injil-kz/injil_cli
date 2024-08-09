@@ -7,7 +7,7 @@ Future<void> main(List<String> args) async {
     await InjilCliCommandRunner().run(
       [
         'feature',
-        '--name=inspector',
+        '--name=auth',
       ],
     ),
   );

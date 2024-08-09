@@ -41,7 +41,6 @@ class InjilCliCommandRunner extends CompletionCommandRunner<int> {
 
     final locationUtils = ProjectLocationUtil();
     // Add sub commands
-    addCommand(SampleCommand(logger: _logger));
     addCommand(UpdateCommand(logger: _logger, pubUpdater: _pubUpdater));
     addCommand(FeatureCommand(logger: _logger, locationUtils: locationUtils));
   }
