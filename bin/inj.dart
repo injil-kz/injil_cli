@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:injil_cli/src/command_runner.dart';
 
 Future<void> main(List<String> args) async {
-  await _flushThenExit(
-    await InjilCliCommandRunner().run([]),
-  );
+  await _flushThenExit(await InjilCliCommandRunner().run(args));
 }
 
 /// Flushes the stdout and stderr streams, then exits the program with the given
