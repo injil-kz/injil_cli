@@ -7,3 +7,6 @@ install:
 reinstall:
 	make deactivate
 	make install
+
+run:
+	dart run bin/inj.dart

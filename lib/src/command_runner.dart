@@ -2,6 +2,7 @@ import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:cli_completion/cli_completion.dart';
 import 'package:injil_cli/src/commands/commands.dart';
+import 'package:injil_cli/src/commands/feature/feature_service.dart';
 import 'package:injil_cli/src/utils/project_location_util.dart';
 import 'package:injil_cli/src/version.dart';
 import 'package:mason_logger/mason_logger.dart';
@@ -42,7 +43,16 @@ class InjilCliCommandRunner extends CompletionCommandRunner<int> {
     final locationUtils = ProjectLocationUtil();
     // Add sub commands
     addCommand(UpdateCommand(logger: _logger, pubUpdater: _pubUpdater));
-    addCommand(FeatureCommand(logger: _logger, locationUtils: locationUtils));
+    addCommand(
+      FeatureCommand(
+        logger: _logger,
+        locationUtils: locationUtils,
+        featureService: FeatureService(
+          locationUtils,
+          _logger,
+        ),
+      ),
+    );
   }
 
   @override

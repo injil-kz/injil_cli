@@ -11,8 +11,20 @@ class ProjectLocationUtil {
     return pubspecExists && libDirExists;
   }
 
+  Future<void> checkAndCreateFolder(String path) async {
+    final isExists = await isPathExists(path);
+    if (!isExists) {
+      await createPath(path);
+    }
+  }
+
   Future<void> createPath(String featuresPath) async {
     await Directory(featuresPath).create(recursive: true);
+  }
+
+  // create file at path
+  Future<void> createFile(String path, String content) async {
+    await File(path).writeAsString(content);
   }
 
   Future<bool> isPathExists(String featuresPath) {
