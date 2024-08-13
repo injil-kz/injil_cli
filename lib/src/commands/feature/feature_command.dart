@@ -1,6 +1,10 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'dart:developer';
+
 import 'package:args/command_runner.dart';
+import 'package:http/http.dart' as http;
+import 'package:injil_cli/src/services/templates_storage.dart';
 import 'package:injil_cli/src/utils/project_location_util.dart';
 import 'package:mason_logger/mason_logger.dart';
 
@@ -16,6 +20,7 @@ class FeatureCommand extends Command<int> {
     required ProjectLocationUtil locationUtils,
   })  : _logger = logger,
         _locationUtils = locationUtils {
+    _templatesStorage = TemplatesStorage();
     argParser.addOption(
       'name',
       help: 'Name of the feature',
@@ -37,6 +42,7 @@ class FeatureCommand extends Command<int> {
   ];
   final Logger _logger;
   final ProjectLocationUtil _locationUtils;
+  late final TemplatesStorage _templatesStorage;
 
   @override
   Future<int> run() async {
@@ -60,21 +66,38 @@ class FeatureCommand extends Command<int> {
       await _locationUtils.createPath(featuresPath);
     }
 
-    final featurePath = '$featuresPath/$featureName';
-    final isFeatureExists = await _locationUtils.isPathExists(featurePath);
-    if (isFeatureExists) {
-      _logger.err('Feature already exists');
-      return ExitCode.success.code;
-    }
-
-    for (final folder in featureFolders) {
-      await _locationUtils.createPath('$featurePath/$folder');
-    }
+    await _createFolders(featureName);
+    await _createFiles(featureName);
 
     var output = 'Feature $featureName created successfully';
     output = lightYellow.wrap(output)!;
     _logger.info(output);
 
     return ExitCode.success.code;
+  }
+
+  Future<void> _createFolders(String featureName) async {
+    for (final folder in featureFolders) {
+      await _locationUtils.createPath('$featuresPath/$featureName/$folder');
+    }
+  }
+
+  Future<void> _createFiles(String featureName) async {
+    final githubUrl = _templatesStorage.repositoryTemplate;
+    try {
+      debugger();
+      final response = await http.get(Uri.parse(githubUrl));
+
+      if (response.statusCode == 200) {
+        final fileContent = response.body;
+        debugger();
+        // Process the file content as needed
+        print(fileContent);
+      } else {
+        print('Failed to load file from GitHub. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error loading file from GitHub: $e');
+    }
   }
 }
