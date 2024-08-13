@@ -10,3 +10,9 @@ reinstall:
 
 run:
 	dart run bin/inj.dart
+
+publish:
+	dart pub publish --dry-run
+
+publish-live:
+	dart pub publish

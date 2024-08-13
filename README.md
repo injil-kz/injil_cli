@@ -27,11 +27,8 @@ dart pub global activate --source=path <path to this package>
 ## Usage
 
 ```sh
-# Sample command
-$ inj sample
-
-# Sample command option
-$ inj sample --cyan
+# Create new feature in project
+$ inj feature --name=auth
 
 # Show CLI version
 $ inj --version

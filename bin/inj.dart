@@ -4,12 +4,7 @@ import 'package:injil_cli/src/command_runner.dart';
 
 Future<void> main(List<String> args) async {
   await _flushThenExit(
-    await InjilCliCommandRunner().run(
-      [
-        'feature',
-        '--name=auth',
-      ],
-    ),
+    await InjilCliCommandRunner().run([]),
   );
 }
 

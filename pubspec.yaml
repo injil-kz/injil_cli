@@ -1,7 +1,7 @@
 name: injil_cli
 description: My new Dart CLI package
 version: 0.0.4
-publish_to: none
+repository: https://github.com/injil-kz/injil_cli
 
 environment:
   sdk: ^3.4.0
