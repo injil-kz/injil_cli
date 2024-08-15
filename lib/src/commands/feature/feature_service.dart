@@ -8,7 +8,10 @@ class FeatureService {
   final Logger _logger;
 
   final Map<String, dynamic> folderStructure = {
-    'config': null,
+    'config': {
+      'di': null,
+      'navigation': null,
+    },
     'data': {
       'repositories': null,
       'models': null,
